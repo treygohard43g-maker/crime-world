@@ -1,494 +1,263 @@
-* {
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-}
 
-html,
-body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  overflow: hidden;
-  background: #111;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
-  touch-action: none;
-}
+  <!DOCTYPE html>
+<html lang="en">
 
-body {
-  position: fixed;
-  inset: 0;
-}
+<head>
 
-#game {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
+  <meta charset="UTF-8">
 
-canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
 
-/* =========================
-   HUD
-========================= */
+  <title>Crime World</title>
 
-.hud {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  <link rel="stylesheet" href="style.css">
 
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  <!-- Three.js import map -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js"
+    }
+  }
+  </script>
 
-  padding:
-    calc(16px + env(safe-area-inset-top))
-    18px
-    0;
+</head>
 
-  pointer-events: none;
-  z-index: 20;
-}
 
-/* LOGO */
+<body>
 
-.game-logo {
-  display: flex;
-  flex-direction: column;
+  <!-- =====================================================
+       GAME
+  ====================================================== -->
 
-  font-size: 13px;
-  line-height: 12px;
-  letter-spacing: 2px;
+  <div id="game"></div>
 
-  color: white;
 
-  text-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.8);
-}
+  <!-- =====================================================
+       HUD
+  ====================================================== -->
 
-.game-logo span {
-  font-weight: 500;
-}
+  <div class="hud">
 
-.game-logo strong {
-  font-size: 16px;
-  letter-spacing: 3px;
-}
+    <div class="game-logo">
 
-/* WANTED */
+      <span>CRIME</span>
 
-.wanted {
-  text-align: center;
-  margin-top: 2px;
-}
+      <strong>WORLD</strong>
 
-.wanted span:first-child {
-  display: block;
+    </div>
 
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 2px;
 
-  color: rgba(255, 255, 255, 0.7);
-}
+    <div class="wanted">
 
-.stars {
-  display: flex;
-  gap: 2px;
-  margin-top: 2px;
-}
+      <span>WANTED</span>
 
-.stars span {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.22);
-}
+      <div class="stars">
 
-/* MONEY */
+        <span>★</span>
+        <span>★</span>
+        <span>★</span>
+        <span>★</span>
+        <span>★</span>
 
-.money {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+      </div>
 
-  text-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.8);
-}
+    </div>
 
-.money small {
-  font-size: 8px;
-  letter-spacing: 1.5px;
-  color: rgba(255, 255, 255, 0.65);
-}
 
-.money strong {
-  font-size: 15px;
-  color: #ffffff;
-}
+    <div class="money">
 
-/* =========================
-   PLAYER STATUS
-========================= */
+      <small>CASH</small>
 
-.player-status {
-  position: fixed;
+      <strong>$0</strong>
 
-  left: 18px;
-  bottom:
-    calc(118px + env(safe-area-inset-bottom));
+    </div>
 
-  width: 135px;
+  </div>
 
-  z-index: 20;
-  pointer-events: none;
-}
 
-.health-bar,
-.armor-bar {
-  width: 100%;
-  height: 5px;
+  <!-- =====================================================
+       PLAYER STATUS
+  ====================================================== -->
 
-  margin-top: 5px;
+  <div class="player-status">
 
-  border-radius: 10px;
+    <div class="health-bar">
 
-  background: rgba(0, 0, 0, 0.45);
+      <div id="healthFill"></div>
 
-  overflow: hidden;
-}
+    </div>
 
-.health-bar div,
-.armor-bar div {
-  width: 100%;
-  height: 100%;
 
-  transition: width 0.2s ease;
-}
+    <div class="armor-bar">
 
-.health-bar div {
-  background: #ef4444;
-}
+      <div id="armorFill"></div>
 
-.armor-bar div {
-  background: #5aa9ff;
-}
+    </div>
 
-/* =========================
-   MISSION
-========================= */
+  </div>
 
-.mission-box {
-  position: fixed;
 
-  left: 50%;
-  top: 82px;
+  <!-- =====================================================
+       MISSION
+  ====================================================== -->
 
-  transform: translateX(-50%);
+  <div class="mission-box">
 
-  width: min(330px, 82vw);
+    <small>MISSION</small>
 
-  padding: 12px 15px;
+    <strong id="missionTitle">
+      Welcome to the City
+    </strong>
 
-  border-radius: 10px;
+    <p id="missionText">
+      Explore the city.
+    </p>
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(12, 17, 22, 0.88),
-      rgba(8, 10, 13, 0.72)
+  </div>
+
+
+  <!-- =====================================================
+       JOYSTICK
+  ====================================================== -->
+
+  <div
+    class="joystick"
+    id="joystick"
+  >
+
+    <div
+      class="joystick-knob"
+      id="joystickKnob"
+    ></div>
+
+  </div>
+
+
+  <!-- =====================================================
+       RIGHT CONTROLS
+  ====================================================== -->
+
+  <div class="controls">
+
+    <button
+      class="control-button"
+      id="jumpButton"
+    >
+      JUMP
+    </button>
+
+
+    <button
+      class="control-button run"
+      id="runButton"
+    >
+      RUN
+    </button>
+
+
+    <button
+      class="control-button action"
+      id="actionButton"
+    >
+      ACTION
+    </button>
+
+  </div>
+
+
+  <!-- =====================================================
+       CAMERA TOUCH
+  ====================================================== -->
+
+  <div
+    id="cameraTouchArea"
+  ></div>
+
+
+  <!-- =====================================================
+       LOADING SCREEN
+  ====================================================== -->
+
+  <div id="loadingScreen">
+
+    <div class="loading-content">
+
+      <div class="loading-logo">
+
+        CRIME
+
+        <strong>WORLD</strong>
+
+      </div>
+
+
+      <div id="loadingText">
+        Loading...
+      </div>
+
+
+      <div class="loading-bar">
+
+        <div
+          id="loadingFill"
+        ></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       GAME SCRIPT
+  ====================================================== -->
+
+  <script
+    type="module"
+    src="./game.js"
+  ></script>
+
+
+  <!-- =====================================================
+       LOADING FAILSAFE
+  ====================================================== -->
+
+  <script>
+
+    window.addEventListener(
+      "load",
+      () => {
+
+        setTimeout(
+          () => {
+
+            const loading =
+              document.getElementById(
+                "loadingScreen"
+              );
+
+            if (loading) {
+
+              loading.classList.add(
+                "hidden"
+              );
+
+            }
+
+          },
+          5000
+        );
+
+      }
     );
 
-  border-left: 3px solid #5ca9ff;
+  </script>
 
-  box-shadow:
-    0 8px 30px rgba(0, 0, 0, 0.28);
+</body>
 
-  color: white;
-
-  pointer-events: none;
-
-  z-index: 15;
-}
-
-.mission-box small {
-  display: block;
-
-  font-size: 8px;
-  letter-spacing: 2px;
-
-  color: #77baff;
-}
-
-.mission-box strong {
-  display: block;
-
-  margin-top: 3px;
-
-  font-size: 14px;
-}
-
-.mission-box p {
-  margin: 4px 0 0;
-
-  font-size: 11px;
-
-  color: rgba(255, 255, 255, 0.65);
-}
-
-/* =========================
-   JOYSTICK
-========================= */
-
-.joystick {
-  position: fixed;
-
-  left: 22px;
-  bottom:
-    calc(22px + env(safe-area-inset-bottom));
-
-  width: 112px;
-  height: 112px;
-
-  border-radius: 50%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(255, 255, 255, 0.11),
-      rgba(255, 255, 255, 0.035)
-    );
-
-  border:
-    1px solid rgba(255, 255, 255, 0.13);
-
-  box-shadow:
-    inset 0 0 25px rgba(255, 255, 255, 0.03);
-
-  z-index: 30;
-}
-
-.joystick-knob {
-  position: absolute;
-
-  left: 50%;
-  top: 50%;
-
-  width: 52px;
-  height: 52px;
-
-  transform: translate(-50%, -50%);
-
-  border-radius: 50%;
-
-  background:
-    radial-gradient(
-      circle at 35% 30%,
-      rgba(255, 255, 255, 0.28),
-      rgba(255, 255, 255, 0.08)
-    );
-
-  border:
-    1px solid rgba(255, 255, 255, 0.2);
-
-  box-shadow:
-    0 5px 20px rgba(0, 0, 0, 0.3);
-}
-
-/* =========================
-   RIGHT CONTROLS
-========================= */
-
-.controls {
-  position: fixed;
-
-  right: 18px;
-  bottom:
-    calc(24px + env(safe-area-inset-bottom));
-
-  display: flex;
-  align-items: flex-end;
-
-  gap: 10px;
-
-  z-index: 30;
-}
-
-.control-button {
-  width: 54px;
-  height: 54px;
-
-  border: 1px solid rgba(255, 255, 255, 0.14);
-
-  border-radius: 50%;
-
-  color: white;
-
-  background:
-    rgba(10, 13, 17, 0.68);
-
-  backdrop-filter: blur(12px);
-
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-
-  box-shadow:
-    0 7px 22px rgba(0, 0, 0, 0.28);
-}
-
-.control-button:active {
-  transform: scale(0.92);
-  background: rgba(255, 255, 255, 0.18);
-}
-
-.control-button.run {
-  width: 64px;
-  height: 64px;
-}
-
-.control-button.action {
-  width: 64px;
-  height: 64px;
-
-  background:
-    rgba(30, 105, 180, 0.75);
-}
-
-/* =========================
-   CAMERA TOUCH AREA
-========================= */
-
-#cameraTouchArea {
-  position: fixed;
-
-  top: 0;
-  right: 0;
-
-  width: 55%;
-  height: 70%;
-
-  z-index: 10;
-
-  touch-action: none;
-}
-
-/* =========================
-   LOADING
-========================= */
-
-#loadingScreen {
-  position: fixed;
-  inset: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background:
-    radial-gradient(
-      circle at center,
-      #202832 0%,
-      #0b0e12 70%
-    );
-
-  z-index: 100;
-
-  transition:
-    opacity 0.7s ease,
-    visibility 0.7s ease;
-}
-
-#loadingScreen.hidden {
-  opacity: 0;
-  visibility: hidden;
-}
-
-.loading-content {
-  width: min(290px, 75vw);
-
-  text-align: center;
-  color: white;
-}
-
-.loading-logo {
-  font-size: 26px;
-  font-weight: 300;
-  letter-spacing: 6px;
-}
-
-.loading-logo strong {
-  display: block;
-  font-size: 31px;
-  letter-spacing: 7px;
-}
-
-.loading-bar {
-  width: 100%;
-  height: 3px;
-
-  margin-top: 30px;
-
-  background: rgba(255, 255, 255, 0.12);
-
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-#loadingFill {
-  width: 0%;
-  height: 100%;
-
-  background: #70b7ff;
-
-  transition: width 0.25s ease;
-}
-
-#loadingText {
-  margin-top: 10px;
-
-  font-size: 10px;
-  letter-spacing: 1px;
-
-  color: rgba(255, 255, 255, 0.55);
-}
-
-/* =========================
-   SMALL SCREENS
-========================= */
-
-@media (max-height: 650px) {
-
-  .joystick {
-    width: 92px;
-    height: 92px;
-  }
-
-  .joystick-knob {
-    width: 44px;
-    height: 44px;
-  }
-
-  .control-button {
-    width: 48px;
-    height: 48px;
-  }
-
-  .control-button.run,
-  .control-button.action {
-    width: 56px;
-    height: 56px;
-  }
-
-  .mission-box {
-    top: 70px;
-  }
-}
+</html>
