@@ -1853,7 +1853,6 @@ async function startGame() {
     "Building city..."
   );
 
-
   await new Promise(
     resolve =>
       setTimeout(
@@ -1869,8 +1868,31 @@ async function startGame() {
   );
 
 
+  /*
+     Give Maria a maximum of 6 seconds to load.
+     The game will continue even if the model
+     takes too long.
+  */
+
+  const loadPromise =
+    loadPlayer();
+
+
+  const timeoutPromise =
+    new Promise(
+      resolve =>
+        setTimeout(
+          () => resolve(false),
+          6000
+        )
+    );
+
+
   const loaded =
-    await loadPlayer();
+    await Promise.race([
+      loadPromise,
+      timeoutPromise
+    ]);
 
 
   if (loaded) {
@@ -1884,7 +1906,7 @@ async function startGame() {
 
     setLoading(
       100,
-      "Character failed to load"
+      "Entering Crime World..."
     );
 
   }
@@ -1892,6 +1914,10 @@ async function startGame() {
 
   updateHUD();
 
+
+  /*
+     Always remove the loading screen.
+  */
 
   setTimeout(
     () => {
@@ -1910,11 +1936,10 @@ async function startGame() {
       }
 
     },
-    800
+    700
   );
 
 }
-
 
 /* =========================================================
    RESIZE
