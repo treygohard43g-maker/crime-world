@@ -1,14 +1,9 @@
-/* =========================================================
-   CRIME WORLD
-   Third-Person Open World Prototype
-========================================================= */
-
 import * as THREE from
   "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
 
 
 /* =========================================================
-   BASIC ELEMENTS
+   ELEMENTS
 ========================================================= */
 
 const game =
@@ -28,7 +23,7 @@ const loadingText =
    LOADING
 ========================================================= */
 
-function setLoading(percent, text) {
+function setLoading(percent, message) {
 
   if (loadingFill) {
     loadingFill.style.width =
@@ -37,7 +32,7 @@ function setLoading(percent, text) {
 
   if (loadingText) {
     loadingText.textContent =
-      text;
+      message;
   }
 
 }
@@ -60,13 +55,13 @@ const scene =
   new THREE.Scene();
 
 scene.background =
-  new THREE.Color(0x9bb7c9);
+  new THREE.Color(0x9db8c8);
 
 scene.fog =
   new THREE.Fog(
-    0x9bb7c9,
-    80,
-    420
+    0x9db8c8,
+    90,
+    430
   );
 
 
@@ -85,8 +80,8 @@ const camera =
 
 camera.position.set(
   0,
-  4,
-  10
+  3,
+  8
 );
 
 
@@ -97,7 +92,8 @@ camera.position.set(
 const renderer =
   new THREE.WebGLRenderer({
     antialias: true,
-    powerPreference: "high-performance"
+    powerPreference:
+      "high-performance"
   });
 
 renderer.setSize(
@@ -112,7 +108,8 @@ renderer.setPixelRatio(
   )
 );
 
-renderer.shadowMap.enabled = true;
+renderer.shadowMap.enabled =
+  true;
 
 renderer.shadowMap.type =
   THREE.PCFSoftShadowMap;
@@ -135,42 +132,56 @@ game.appendChild(
    LIGHTING
 ========================================================= */
 
-const skyLight =
+const hemisphere =
   new THREE.HemisphereLight(
-    0xbfdcff,
-    0x39434c,
-    2.2
+    0xc9e4ff,
+    0x394047,
+    2.4
   );
 
 scene.add(
-  skyLight
+  hemisphere
 );
 
 
 const sun =
   new THREE.DirectionalLight(
-    0xfff1d0,
-    3.2
+    0xffefcf,
+    3.3
   );
 
 sun.position.set(
-  80,
-  120,
-  50
+  90,
+  130,
+  60
 );
 
-sun.castShadow = true;
+sun.castShadow =
+  true;
 
-sun.shadow.mapSize.width = 2048;
-sun.shadow.mapSize.height = 2048;
+sun.shadow.mapSize.width =
+  2048;
 
-sun.shadow.camera.left = -180;
-sun.shadow.camera.right = 180;
-sun.shadow.camera.top = 180;
-sun.shadow.camera.bottom = -180;
+sun.shadow.mapSize.height =
+  2048;
 
-sun.shadow.camera.near = 1;
-sun.shadow.camera.far = 500;
+sun.shadow.camera.left =
+  -180;
+
+sun.shadow.camera.right =
+  180;
+
+sun.shadow.camera.top =
+  180;
+
+sun.shadow.camera.bottom =
+  -180;
+
+sun.shadow.camera.near =
+  1;
+
+sun.shadow.camera.far =
+  500;
 
 scene.add(
   sun
@@ -188,29 +199,23 @@ const WORLD_SIZE = 360;
    GROUND
 ========================================================= */
 
-const groundGeometry =
-  new THREE.PlaneGeometry(
-    WORLD_SIZE,
-    WORLD_SIZE
-  );
-
-const groundMaterial =
-  new THREE.MeshStandardMaterial({
-    color: 0x4d5758,
-    roughness: 0.95,
-    metalness: 0.02
-  });
-
 const ground =
   new THREE.Mesh(
-    groundGeometry,
-    groundMaterial
+    new THREE.PlaneGeometry(
+      WORLD_SIZE,
+      WORLD_SIZE
+    ),
+    new THREE.MeshStandardMaterial({
+      color: 0x50595a,
+      roughness: 0.96
+    })
   );
 
 ground.rotation.x =
   -Math.PI / 2;
 
-ground.receiveShadow = true;
+ground.receiveShadow =
+  true;
 
 scene.add(
   ground
@@ -225,41 +230,32 @@ function createRoad(
   x,
   z,
   width,
-  length,
-  rotation = 0
+  length
 ) {
-
-  const roadGeometry =
-    new THREE.PlaneGeometry(
-      width,
-      length
-    );
-
-  const roadMaterial =
-    new THREE.MeshStandardMaterial({
-      color: 0x25292c,
-      roughness: 0.9
-    });
 
   const road =
     new THREE.Mesh(
-      roadGeometry,
-      roadMaterial
+      new THREE.PlaneGeometry(
+        width,
+        length
+      ),
+      new THREE.MeshStandardMaterial({
+        color: 0x24282b,
+        roughness: 0.92
+      })
     );
 
   road.rotation.x =
     -Math.PI / 2;
 
-  road.rotation.z =
-    rotation;
-
   road.position.set(
     x,
-    0.012,
+    0.015,
     z
   );
 
-  road.receiveShadow = true;
+  road.receiveShadow =
+    true;
 
   scene.add(
     road
@@ -319,27 +315,20 @@ function createSidewalk(
   x,
   z,
   width,
-  length,
-  rotation = 0
+  length
 ) {
-
-  const geometry =
-    new THREE.BoxGeometry(
-      width,
-      0.16,
-      length
-    );
-
-  const material =
-    new THREE.MeshStandardMaterial({
-      color: 0x858585,
-      roughness: 0.85
-    });
 
   const sidewalk =
     new THREE.Mesh(
-      geometry,
-      material
+      new THREE.BoxGeometry(
+        width,
+        0.16,
+        length
+      ),
+      new THREE.MeshStandardMaterial({
+        color: 0x858585,
+        roughness: 0.9
+      })
     );
 
   sidewalk.position.set(
@@ -348,10 +337,8 @@ function createSidewalk(
     z
   );
 
-  sidewalk.rotation.y =
-    rotation;
-
-  sidewalk.receiveShadow = true;
+  sidewalk.receiveShadow =
+    true;
 
   scene.add(
     sidewalk
@@ -359,8 +346,6 @@ function createSidewalk(
 
 }
 
-
-/* sidewalks */
 
 createSidewalk(
   -10,
@@ -399,32 +384,22 @@ function createRoadLine(
   x,
   z,
   width,
-  length,
-  rotation = 0
+  length
 ) {
-
-  const geometry =
-    new THREE.PlaneGeometry(
-      width,
-      length
-    );
-
-  const material =
-    new THREE.MeshBasicMaterial({
-      color: 0xe5e1c9
-    });
 
   const line =
     new THREE.Mesh(
-      geometry,
-      material
+      new THREE.PlaneGeometry(
+        width,
+        length
+      ),
+      new THREE.MeshBasicMaterial({
+        color: 0xe7e2c8
+      })
     );
 
   line.rotation.x =
     -Math.PI / 2;
-
-  line.rotation.z =
-    rotation;
 
   line.position.set(
     x,
@@ -441,7 +416,7 @@ function createRoadLine(
 
 for (
   let z = -170;
-  z < 170;
+  z <= 170;
   z += 8
 ) {
 
@@ -457,7 +432,7 @@ for (
 
 for (
   let x = -170;
-  x < 170;
+  x <= 170;
   x += 8
 ) {
 
@@ -483,31 +458,24 @@ function createBuilding(
   height
 ) {
 
-  const buildingGeometry =
-    new THREE.BoxGeometry(
-      width,
-      height,
-      depth
-    );
-
-  const buildingMaterial =
-    new THREE.MeshStandardMaterial({
-      color:
-        new THREE.Color()
-          .setHSL(
+  const building =
+    new THREE.Mesh(
+      new THREE.BoxGeometry(
+        width,
+        height,
+        depth
+      ),
+      new THREE.MeshStandardMaterial({
+        color:
+          new THREE.Color().setHSL(
             0.58,
             0.08,
             0.25 +
               Math.random() * 0.18
           ),
-      roughness: 0.8,
-      metalness: 0.08
-    });
-
-  const building =
-    new THREE.Mesh(
-      buildingGeometry,
-      buildingMaterial
+        roughness: 0.82,
+        metalness: 0.06
+      })
     );
 
   building.position.set(
@@ -516,31 +484,28 @@ function createBuilding(
     z
   );
 
-  building.castShadow = true;
-  building.receiveShadow = true;
+  building.castShadow =
+    true;
+
+  building.receiveShadow =
+    true;
 
   scene.add(
     building
   );
 
 
-  const roofGeometry =
-    new THREE.BoxGeometry(
-      width + 0.4,
-      0.25,
-      depth + 0.4
-    );
-
-  const roofMaterial =
-    new THREE.MeshStandardMaterial({
-      color: 0x202326,
-      roughness: 0.9
-    });
-
   const roof =
     new THREE.Mesh(
-      roofGeometry,
-      roofMaterial
+      new THREE.BoxGeometry(
+        width + 0.4,
+        0.25,
+        depth + 0.4
+      ),
+      new THREE.MeshStandardMaterial({
+        color: 0x202326,
+        roughness: 0.9
+      })
     );
 
   roof.position.set(
@@ -549,7 +514,8 @@ function createBuilding(
     z
   );
 
-  roof.castShadow = true;
+  roof.castShadow =
+    true;
 
   scene.add(
     roof
@@ -558,8 +524,8 @@ function createBuilding(
 
   const windowMaterial =
     new THREE.MeshStandardMaterial({
-      color: 0x9fc4d6,
-      emissive: 0x172b36,
+      color: 0x9fc5d7,
+      emissive: 0x152b38,
       roughness: 0.35,
       metalness: 0.15
     });
@@ -596,51 +562,40 @@ function createBuilding(
     ) {
 
       if (
-        Math.random() < 0.16
-      ) continue;
+        Math.random() < 0.15
+      ) {
+        continue;
+      }
 
 
-      const windowGeometry =
-        new THREE.BoxGeometry(
-          1.15,
-          1.35,
-          0.08
-        );
-
-
-      const windowMesh =
+      const window =
         new THREE.Mesh(
-          windowGeometry,
+          new THREE.BoxGeometry(
+            1.15,
+            1.35,
+            0.08
+          ),
           windowMaterial
         );
 
 
-      const wx =
+      window.position.set(
         x -
-        width / 2 +
-        1.7 +
-        column * 3.2;
+          width / 2 +
+          1.7 +
+          column * 3.2,
 
-
-      const wy =
         2 +
-        floor * 3.4;
+          floor * 3.4,
 
-
-      const wz =
         z -
-        depth / 2 -
-        0.06;
-
-
-      windowMesh.position.set(
-        wx,
-        wy,
-        wz
+          depth / 2 -
+          0.06
       );
 
+
       scene.add(
-        windowMesh
+        window
       );
 
     }
@@ -651,10 +606,10 @@ function createBuilding(
 
 
 /* =========================================================
-   CITY BLOCKS
+   CITY
 ========================================================= */
 
-const buildingBlocks = [
+const blocks = [
 
   [-55, -55, 25, 25, 32],
   [55, -55, 28, 24, 48],
@@ -678,68 +633,12 @@ const buildingBlocks = [
 
 
 for (
-  const building of buildingBlocks
+  const block of blocks
 ) {
 
   createBuilding(
-    ...building
+    ...block
   );
-
-}
-
-
-/* =========================================================
-   SMALLER CITY BUILDINGS
-========================================================= */
-
-for (
-  let x = -155;
-  x <= 155;
-  x += 38
-) {
-
-  for (
-    let z = -155;
-    z <= 155;
-    z += 38
-  ) {
-
-    const nearMainRoad =
-      Math.abs(x) < 22 ||
-      Math.abs(z) < 22;
-
-    if (nearMainRoad)
-      continue;
-
-
-    if (
-      Math.random() < 0.48
-    ) {
-
-      const width =
-        18 +
-        Math.random() * 10;
-
-      const depth =
-        18 +
-        Math.random() * 10;
-
-      const height =
-        12 +
-        Math.random() * 28;
-
-
-      createBuilding(
-        x,
-        z,
-        width,
-        depth,
-        height
-      );
-
-    }
-
-  }
 
 }
 
@@ -753,23 +652,17 @@ function createTree(
   z
 ) {
 
-  const trunkGeometry =
-    new THREE.CylinderGeometry(
-      0.35,
-      0.5,
-      3.2,
-      8
-    );
-
-  const trunkMaterial =
-    new THREE.MeshStandardMaterial({
-      color: 0x5a3b27
-    });
-
   const trunk =
     new THREE.Mesh(
-      trunkGeometry,
-      trunkMaterial
+      new THREE.CylinderGeometry(
+        0.35,
+        0.5,
+        3.2,
+        8
+      ),
+      new THREE.MeshStandardMaterial({
+        color: 0x5a3b27
+      })
     );
 
   trunk.position.set(
@@ -778,30 +671,25 @@ function createTree(
     z
   );
 
-  trunk.castShadow = true;
+  trunk.castShadow =
+    true;
 
   scene.add(
     trunk
   );
 
 
-  const crownGeometry =
-    new THREE.SphereGeometry(
-      2.4,
-      12,
-      10
-    );
-
-  const crownMaterial =
-    new THREE.MeshStandardMaterial({
-      color: 0x254f31,
-      roughness: 0.9
-    });
-
   const crown =
     new THREE.Mesh(
-      crownGeometry,
-      crownMaterial
+      new THREE.SphereGeometry(
+        2.4,
+        12,
+        10
+      ),
+      new THREE.MeshStandardMaterial({
+        color: 0x254f31,
+        roughness: 0.9
+      })
     );
 
   crown.position.set(
@@ -810,9 +698,11 @@ function createTree(
     z
   );
 
-  crown.scale.y = 1.15;
+  crown.scale.y =
+    1.15;
 
-  crown.castShadow = true;
+  crown.castShadow =
+    true;
 
   scene.add(
     crown
@@ -843,7 +733,9 @@ for (
   if (
     Math.abs(x) < 14 ||
     Math.abs(z) < 14
-  ) continue;
+  ) {
+    continue;
+  }
 
 
   createTree(
@@ -863,25 +755,19 @@ function createStreetLight(
   z
 ) {
 
-  const poleGeometry =
-    new THREE.CylinderGeometry(
-      0.08,
-      0.12,
-      6,
-      8
-    );
-
-  const poleMaterial =
-    new THREE.MeshStandardMaterial({
-      color: 0x24272a,
-      metalness: 0.7,
-      roughness: 0.35
-    });
-
   const pole =
     new THREE.Mesh(
-      poleGeometry,
-      poleMaterial
+      new THREE.CylinderGeometry(
+        0.08,
+        0.12,
+        6,
+        8
+      ),
+      new THREE.MeshStandardMaterial({
+        color: 0x24272a,
+        metalness: 0.7,
+        roughness: 0.35
+      })
     );
 
   pole.position.set(
@@ -890,31 +776,26 @@ function createStreetLight(
     z
   );
 
-  pole.castShadow = true;
+  pole.castShadow =
+    true;
 
   scene.add(
     pole
   );
 
 
-  const lampGeometry =
-    new THREE.SphereGeometry(
-      0.28,
-      10,
-      8
-    );
-
-  const lampMaterial =
-    new THREE.MeshStandardMaterial({
-      color: 0xffe9aa,
-      emissive: 0xffb83d,
-      emissiveIntensity: 2
-    });
-
   const lamp =
     new THREE.Mesh(
-      lampGeometry,
-      lampMaterial
+      new THREE.SphereGeometry(
+        0.28,
+        10,
+        8
+      ),
+      new THREE.MeshStandardMaterial({
+        color: 0xffe9aa,
+        emissive: 0xffb83d,
+        emissiveIntensity: 2
+      })
     );
 
   lamp.position.set(
@@ -968,7 +849,7 @@ for (
 
 
 /* =========================================================
-   PLAYER STATE
+   PLAYER
 ========================================================= */
 
 const playerState = {
@@ -980,16 +861,15 @@ const playerState = {
       28
     ),
 
-  velocity:
-    new THREE.Vector3(),
+  speed: 4.8,
 
-  rotation: 0,
+  runSpeed: 8.5,
 
-  speed: 5,
+  running: false,
 
-  runSpeed: 9,
+  jumping: false,
 
-  running: false
+  verticalVelocity: 0
 
 };
 
@@ -1004,7 +884,7 @@ let activeAnimation = null;
 
 
 /* =========================================================
-   MARIA LOADER + VISIBLE DIAGNOSTIC
+   MARIA DIAGNOSTIC
 ========================================================= */
 
 function showMariaStatus(
@@ -1039,21 +919,18 @@ function showMariaStatus(
         zIndex: "99999",
         padding: "14px",
         borderRadius: "12px",
-        fontFamily:
-          "Arial, sans-serif",
+        fontFamily: "Arial",
         fontSize: "13px",
         lineHeight: "1.45",
-        color: "#ffffff",
+        color: "#fff",
         background:
-          "rgba(0,0,0,0.92)",
+          "rgba(0,0,0,.92)",
         border:
           "2px solid #4da6ff",
         whiteSpace:
           "pre-wrap",
         wordBreak:
-          "break-word",
-        maxHeight: "190px",
-        overflow: "auto"
+          "break-word"
       }
     );
 
@@ -1065,26 +942,12 @@ function showMariaStatus(
   }
 
 
-  if (
+  box.style.borderColor =
     type === "error"
-  ) {
-
-    box.style.borderColor =
-      "#ff4040";
-
-  } else if (
-    type === "success"
-  ) {
-
-    box.style.borderColor =
-      "#35d07f";
-
-  } else {
-
-    box.style.borderColor =
-      "#4da6ff";
-
-  }
+      ? "#ff4040"
+      : type === "success"
+        ? "#35d07f"
+        : "#4da6ff";
 
 
   box.textContent =
@@ -1092,6 +955,26 @@ function showMariaStatus(
 
 }
 
+
+function removeMariaStatus() {
+
+  const box =
+    document.getElementById(
+      "mariaStatus"
+    );
+
+  if (box) {
+
+    box.remove();
+
+  }
+
+}
+
+
+/* =========================================================
+   LOAD MARIA
+========================================================= */
 
 async function loadPlayer() {
 
@@ -1104,19 +987,11 @@ async function loadPlayer() {
 
   showMariaStatus(
     "MARIA STATUS\n\n" +
-    "Starting Maria loader...\n\n" +
-    "File:\n" +
-    modelPath
+    "Loading Maria..."
   );
 
 
   try {
-
-    showMariaStatus(
-      "MARIA STATUS\n\n" +
-      "Loading GLTFLoader..."
-    );
-
 
     const module =
       await import(
@@ -1126,22 +1001,6 @@ async function loadPlayer() {
 
     const GLTFLoader =
       module.GLTFLoader;
-
-
-    if (!GLTFLoader) {
-
-      throw new Error(
-        "GLTFLoader was not found."
-      );
-
-    }
-
-
-    showMariaStatus(
-      "MARIA STATUS\n\n" +
-      "GLTFLoader loaded ✓\n\n" +
-      "Checking Maria file..."
-    );
 
 
     const response =
@@ -1156,24 +1015,12 @@ async function loadPlayer() {
     if (!response.ok) {
 
       throw new Error(
-        "Maria GLB file was not found.\n\n" +
-        "HTTP Status: " +
-        response.status +
-        " " +
-        response.statusText
+        "Maria file could not be found.\n\n" +
+        "HTTP " +
+        response.status
       );
 
     }
-
-
-    showMariaStatus(
-      "MARIA STATUS\n\n" +
-      "Maria GLB file found ✓\n\n" +
-      "HTTP Status: " +
-      response.status +
-      "\n\n" +
-      "Parsing Maria..."
-    );
 
 
     const loader =
@@ -1184,8 +1031,6 @@ async function loadPlayer() {
 
       modelPath,
 
-
-      /* SUCCESS */
 
       (gltf) => {
 
@@ -1198,11 +1043,15 @@ async function loadPlayer() {
           if (!player) {
 
             throw new Error(
-              "GLB loaded but contains no scene."
+              "Maria scene is empty."
             );
 
           }
 
+
+          /* ===============================================
+             SCALE
+          =============================================== */
 
           const box =
             new THREE.Box3()
@@ -1233,19 +1082,25 @@ async function loadPlayer() {
               size.y;
 
 
-            player.scale.set(
-              scale,
-              scale,
+            player.scale.setScalar(
               scale
             );
 
           }
 
 
+          /* ===============================================
+             POSITION
+          =============================================== */
+
           player.position.copy(
             playerState.position
           );
 
+
+          /* ===============================================
+             SHADOWS
+          =============================================== */
 
           player.traverse(
             (object) => {
@@ -1260,6 +1115,16 @@ async function loadPlayer() {
                 object.receiveShadow =
                   true;
 
+                if (
+                  object.material
+                ) {
+
+                  object.material
+                    .side =
+                    THREE.FrontSide;
+
+                }
+
               }
 
             }
@@ -1271,11 +1136,13 @@ async function loadPlayer() {
           );
 
 
-          /* animations */
+          /* ===============================================
+             ANIMATIONS
+          =============================================== */
 
           if (
             gltf.animations &&
-            gltf.animations.length > 0
+            gltf.animations.length
           ) {
 
             mixer =
@@ -1300,35 +1167,17 @@ async function loadPlayer() {
 
             }
 
-
-            playBestAnimation(
-              [
-                "idle",
-                "standing",
-                "breathing"
-              ]
-            );
-
           }
 
 
-          showMariaStatus(
-            "MARIA STATUS\n\n" +
-            "✓ MARIA LOADED SUCCESSFULLY\n\n" +
-            "Height: 1.75m\n" +
-            "Animations: " +
-            (
-              gltf.animations
-                ? gltf.animations.length
-                : 0
-            ),
-            "success"
-          );
+          playIdle();
+
+
+          removeMariaStatus();
 
 
           console.log(
-            "Maria loaded successfully.",
-            gltf
+            "Maria loaded successfully."
           );
 
         } catch (
@@ -1337,8 +1186,6 @@ async function loadPlayer() {
 
           showMariaStatus(
             "MARIA ERROR\n\n" +
-            "Maria loaded but could not be added.\n\n" +
-            "Exact error:\n" +
             error.message,
             "error"
           );
@@ -1348,57 +1195,19 @@ async function loadPlayer() {
       },
 
 
-      /* PROGRESS */
+      null,
 
-      (progress) => {
-
-        if (
-          progress.total > 0
-        ) {
-
-          const percent =
-            Math.round(
-              progress.loaded /
-              progress.total *
-              100
-            );
-
-
-          showMariaStatus(
-            "MARIA STATUS\n\n" +
-            "Downloading Maria...\n\n" +
-            percent +
-            "% complete"
-          );
-
-        }
-
-      },
-
-
-      /* ERROR */
 
       (error) => {
 
         showMariaStatus(
           "MARIA ERROR\n\n" +
-          "Maria could NOT be loaded.\n\n" +
-          "Exact error:\n" +
+          "Could not load Maria.\n\n" +
           (
-            error &&
-            error.message
-              ? error.message
-              : String(error)
-          ) +
-          "\n\nFile:\n" +
-          modelPath,
+            error.message ||
+            String(error)
+          ),
           "error"
-        );
-
-
-        console.error(
-          "Maria GLTFLoader error:",
-          error
         );
 
       }
@@ -1411,23 +1220,8 @@ async function loadPlayer() {
 
     showMariaStatus(
       "MARIA ERROR\n\n" +
-      "Maria loading failed.\n\n" +
-      "Exact error:\n" +
-      (
-        error &&
-        error.message
-          ? error.message
-          : String(error)
-      ) +
-      "\n\nFile:\n" +
-      modelPath,
+      error.message,
       "error"
-    );
-
-
-    console.error(
-      "Maria loader error:",
-      error
     );
 
   }
@@ -1436,10 +1230,49 @@ async function loadPlayer() {
 
 
 /* =========================================================
-   ANIMATION
+   ANIMATION SYSTEM
 ========================================================= */
 
-function playBestAnimation(
+function findAnimation(
+  names
+) {
+
+  const keys =
+    Object.keys(
+      animations
+    );
+
+
+  for (
+    const name of names
+  ) {
+
+    const found =
+      keys.find(
+        key =>
+          key.includes(
+            name
+          )
+      );
+
+
+    if (found) {
+
+      return animations[
+        found
+      ];
+
+    }
+
+  }
+
+
+  return null;
+
+}
+
+
+function playAnimation(
   names
 ) {
 
@@ -1447,76 +1280,80 @@ function playBestAnimation(
     return;
 
 
-  let found = null;
+  const action =
+    findAnimation(
+      names
+    );
 
 
-  for (
-    const name of names
+  if (!action)
+    return;
+
+
+  if (
+    activeAnimation ===
+    action
   ) {
-
-    const key =
-      Object.keys(
-        animations
-      ).find(
-        animationName =>
-          animationName.includes(
-            name
-          )
-      );
-
-
-    if (key) {
-
-      found =
-        animations[key];
-
-      break;
-
-    }
-
-  }
-
-
-  if (!found) {
-
-    const first =
-      Object.values(
-        animations
-      )[0];
-
-
-    if (first)
-      found = first;
-
+    return;
   }
 
 
   if (
-    found &&
-    found !== activeAnimation
+    activeAnimation
   ) {
 
-    if (
-      activeAnimation
-    ) {
-
-      activeAnimation.fadeOut(
-        0.2
-      );
-
-    }
-
-
-    found
-      .reset()
-      .fadeIn(0.2)
-      .play();
-
-
-    activeAnimation =
-      found;
+    activeAnimation
+      .fadeOut(0.2);
 
   }
+
+
+  action
+    .reset()
+    .fadeIn(0.2)
+    .play();
+
+
+  activeAnimation =
+    action;
+
+}
+
+
+function playIdle() {
+
+  playAnimation(
+    [
+      "idle",
+      "standing",
+      "breathing"
+    ]
+  );
+
+}
+
+
+function playWalk() {
+
+  playAnimation(
+    [
+      "walk",
+      "walking"
+    ]
+  );
+
+}
+
+
+function playRun() {
+
+  playAnimation(
+    [
+      "run",
+      "running",
+      "sprint"
+    ]
+  );
 
 }
 
@@ -1540,7 +1377,8 @@ let joystickX = 0;
 
 let joystickY = 0;
 
-let joystickActive = false;
+let joystickActive =
+  false;
 
 
 if (joystick) {
@@ -1556,6 +1394,10 @@ if (joystick) {
         event.pointerId
       );
 
+      updateJoystick(
+        event
+      );
+
     }
   );
 
@@ -1565,76 +1407,12 @@ if (joystick) {
     (event) => {
 
       if (
-        !joystickActive
-      )
-        return;
+        joystickActive
+      ) {
 
-
-      const rect =
-        joystick.getBoundingClientRect();
-
-
-      const centerX =
-        rect.left +
-        rect.width / 2;
-
-
-      const centerY =
-        rect.top +
-        rect.height / 2;
-
-
-      const max =
-        rect.width * 0.32;
-
-
-      let dx =
-        event.clientX -
-        centerX;
-
-
-      let dy =
-        event.clientY -
-        centerY;
-
-
-      const distance =
-        Math.sqrt(
-          dx * dx +
-          dy * dy
+        updateJoystick(
+          event
         );
-
-
-      if (
-        distance > max
-      ) {
-
-        dx =
-          dx /
-          distance *
-          max;
-
-        dy =
-          dy /
-          distance *
-          max;
-
-      }
-
-
-      joystickX =
-        dx / max;
-
-      joystickY =
-        dy / max;
-
-
-      if (
-        joystickKnob
-      ) {
-
-        joystickKnob.style.transform =
-          `translate(${dx}px, ${dy}px)`;
 
       }
 
@@ -1656,6 +1434,82 @@ if (joystick) {
 }
 
 
+function updateJoystick(
+  event
+) {
+
+  const rect =
+    joystick.getBoundingClientRect();
+
+
+  const centerX =
+    rect.left +
+    rect.width / 2;
+
+
+  const centerY =
+    rect.top +
+    rect.height / 2;
+
+
+  const max =
+    rect.width * 0.32;
+
+
+  let dx =
+    event.clientX -
+    centerX;
+
+
+  let dy =
+    event.clientY -
+    centerY;
+
+
+  const distance =
+    Math.sqrt(
+      dx * dx +
+      dy * dy
+    );
+
+
+  if (
+    distance > max
+  ) {
+
+    dx =
+      dx /
+      distance *
+      max;
+
+    dy =
+      dy /
+      distance *
+      max;
+
+  }
+
+
+  joystickX =
+    dx / max;
+
+
+  joystickY =
+    dy / max;
+
+
+  if (
+    joystickKnob
+  ) {
+
+    joystickKnob.style.transform =
+      `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+
+  }
+
+}
+
+
 function resetJoystick() {
 
   joystickActive =
@@ -1671,7 +1525,7 @@ function resetJoystick() {
   ) {
 
     joystickKnob.style.transform =
-      "translate(0, 0)";
+      "translate(-50%, -50%)";
 
   }
 
@@ -1679,7 +1533,7 @@ function resetJoystick() {
 
 
 /* =========================================================
-   RUN
+   RUN BUTTON
 ========================================================= */
 
 const runButton =
@@ -1722,11 +1576,82 @@ if (runButton) {
     }
   );
 
+
+  runButton.addEventListener(
+    "pointerleave",
+    () => {
+
+      playerState.running =
+        false;
+
+    }
+  );
+
 }
 
 
 /* =========================================================
-   CAMERA TOUCH
+   JUMP
+========================================================= */
+
+const jumpButton =
+  document.getElementById(
+    "jumpButton"
+  );
+
+
+if (jumpButton) {
+
+  jumpButton.addEventListener(
+    "pointerdown",
+    () => {
+
+      if (
+        !playerState.jumping
+      ) {
+
+        playerState.jumping =
+          true;
+
+        playerState.verticalVelocity =
+          7;
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   ACTION
+========================================================= */
+
+const actionButton =
+  document.getElementById(
+    "actionButton"
+  );
+
+
+if (actionButton) {
+
+  actionButton.addEventListener(
+    "pointerdown",
+    () => {
+
+      console.log(
+        "ACTION pressed"
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   CAMERA
 ========================================================= */
 
 const cameraTouchArea =
@@ -1735,11 +1660,17 @@ const cameraTouchArea =
   );
 
 
-let cameraTouching = false;
+let cameraDragging =
+  false;
 
-let lastTouchX = 0;
+let lastCameraX =
+  0;
 
-let cameraAngle = 0;
+let cameraAngle =
+  0;
+
+let cameraPitch =
+  0.25;
 
 
 if (cameraTouchArea) {
@@ -1748,10 +1679,10 @@ if (cameraTouchArea) {
     "pointerdown",
     (event) => {
 
-      cameraTouching =
+      cameraDragging =
         true;
 
-      lastTouchX =
+      lastCameraX =
         event.clientX;
 
       cameraTouchArea.setPointerCapture(
@@ -1767,17 +1698,18 @@ if (cameraTouchArea) {
     (event) => {
 
       if (
-        !cameraTouching
-      )
+        !cameraDragging
+      ) {
         return;
+      }
 
 
       const movement =
         event.clientX -
-        lastTouchX;
+        lastCameraX;
 
 
-      lastTouchX =
+      lastCameraX =
         event.clientX;
 
 
@@ -1792,7 +1724,7 @@ if (cameraTouchArea) {
     "pointerup",
     () => {
 
-      cameraTouching =
+      cameraDragging =
         false;
 
     }
@@ -1803,7 +1735,7 @@ if (cameraTouchArea) {
     "pointercancel",
     () => {
 
-      cameraTouching =
+      cameraDragging =
         false;
 
     }
@@ -1824,132 +1756,191 @@ function updatePlayer(
     return;
 
 
-  const movement =
+  const inputX =
+    joystickX;
+
+
+  const inputY =
+    joystickY;
+
+
+  const moving =
+    Math.abs(inputX) > 0.08 ||
+    Math.abs(inputY) > 0.08;
+
+
+  /* ===============================================
+     GRAVITY / JUMP
+  =============================================== */
+
+  if (
+    playerState.jumping
+  ) {
+
+    playerState.verticalVelocity -=
+      18 * delta;
+
+
+    player.position.y +=
+      playerState.verticalVelocity *
+      delta;
+
+
+    if (
+      player.position.y <= 0
+    ) {
+
+      player.position.y =
+        0;
+
+      playerState.jumping =
+        false;
+
+      playerState.verticalVelocity =
+        0;
+
+    }
+
+  }
+
+
+  if (!moving) {
+
+    playIdle();
+
+    return;
+
+  }
+
+
+  /* ===============================================
+     MOVEMENT DIRECTION
+  =============================================== */
+
+  const forward =
     new THREE.Vector3(
-      joystickX,
+      Math.sin(cameraAngle),
       0,
-      joystickY
+      Math.cos(cameraAngle)
+    );
+
+
+  const right =
+    new THREE.Vector3(
+      Math.cos(cameraAngle),
+      0,
+      -Math.sin(cameraAngle)
+    );
+
+
+  const direction =
+    new THREE.Vector3();
+
+
+  direction
+    .addScaledVector(
+      right,
+      inputX
+    );
+
+
+  direction
+    .addScaledVector(
+      forward,
+      inputY
     );
 
 
   if (
-    movement.lengthSq() > 0.01
+    direction.lengthSq() >
+    0.001
   ) {
-
-    movement.normalize();
-
-
-    const speed =
-      playerState.running
-        ? playerState.runSpeed
-        : playerState.speed;
-
-
-    const forward =
-      new THREE.Vector3(
-        Math.sin(cameraAngle),
-        0,
-        Math.cos(cameraAngle)
-      );
-
-
-    const right =
-      new THREE.Vector3(
-        Math.cos(cameraAngle),
-        0,
-        -Math.sin(cameraAngle)
-      );
-
-
-    const direction =
-      new THREE.Vector3();
-
-
-    direction.addScaledVector(
-      right,
-      movement.x
-    );
-
-
-    direction.addScaledVector(
-      forward,
-      movement.z
-    );
-
 
     direction.normalize();
 
+  }
 
-    player.position.addScaledVector(
-      direction,
-      speed * delta
+
+  const speed =
+    playerState.running
+      ? playerState.runSpeed
+      : playerState.speed;
+
+
+  player.position.addScaledVector(
+    direction,
+    speed * delta
+  );
+
+
+  /* ===============================================
+     WORLD BOUNDS
+  =============================================== */
+
+  player.position.x =
+    THREE.MathUtils.clamp(
+      player.position.x,
+      -170,
+      170
     );
 
 
-    player.position.x =
-      THREE.MathUtils.clamp(
-        player.position.x,
-        -170,
-        170
-      );
+  player.position.z =
+    THREE.MathUtils.clamp(
+      player.position.z,
+      -170,
+      170
+    );
 
 
-    player.position.z =
-      THREE.MathUtils.clamp(
-        player.position.z,
-        -170,
-        170
-      );
+  /* ===============================================
+     CHARACTER ROTATION
+  =============================================== */
+
+  const targetRotation =
+    Math.atan2(
+      direction.x,
+      direction.z
+    );
 
 
-    const targetRotation =
-      Math.atan2(
-        direction.x,
-        direction.z
-      );
+  let rotationDifference =
+    targetRotation -
+    player.rotation.y;
 
 
-    player.rotation.y =
-      THREE.MathUtils.lerp(
-        player.rotation.y,
-        targetRotation,
-        0.15
-      );
+  rotationDifference =
+    Math.atan2(
+      Math.sin(
+        rotationDifference
+      ),
+      Math.cos(
+        rotationDifference
+      )
+    );
 
 
-    if (
-      playerState.running
-    ) {
+  player.rotation.y +=
+    rotationDifference *
+    Math.min(
+      1,
+      delta * 10
+    );
 
-      playBestAnimation(
-        [
-          "run",
-          "running"
-        ]
-      );
 
-    } else {
+  /* ===============================================
+     ANIMATION
+  =============================================== */
 
-      playBestAnimation(
-        [
-          "walk",
-          "walking",
-          "idle",
-          "standing"
-        ]
-      );
+  if (
+    playerState.running
+  ) {
 
-    }
+    playRun();
 
   } else {
 
-    playBestAnimation(
-      [
-        "idle",
-        "standing",
-        "breathing"
-      ]
-    );
+    playWalk();
 
   }
 
@@ -1957,7 +1948,7 @@ function updatePlayer(
 
 
 /* =========================================================
-   THIRD-PERSON CAMERA
+   THIRD PERSON CAMERA
 ========================================================= */
 
 function updateCamera(
@@ -1969,19 +1960,25 @@ function updateCamera(
 
 
   const distance =
-    6.5;
+    5.8;
 
 
-  const height =
-    3.0;
+  const cameraHeight =
+    2.8;
 
 
-  const target =
-    new THREE.Vector3(
-      player.position.x,
-      player.position.y + 1.35,
-      player.position.z
-    );
+  const horizontalDistance =
+    Math.cos(
+      cameraPitch
+    ) *
+    distance;
+
+
+  const verticalDistance =
+    Math.sin(
+      cameraPitch
+    ) *
+    distance;
 
 
   const desiredPosition =
@@ -1989,30 +1986,43 @@ function updateCamera(
 
       player.position.x +
         Math.sin(cameraAngle) *
-        distance,
+        horizontalDistance,
 
       player.position.y +
-        height,
+        cameraHeight +
+        verticalDistance,
 
       player.position.z +
         Math.cos(cameraAngle) *
-        distance
+        horizontalDistance
 
+    );
+
+
+  const smoothing =
+    1 -
+    Math.pow(
+      0.0005,
+      delta
     );
 
 
   camera.position.lerp(
     desiredPosition,
-    1 -
-      Math.pow(
-        0.001,
-        delta
-      )
+    smoothing
   );
 
 
+  const lookTarget =
+    new THREE.Vector3(
+      player.position.x,
+      player.position.y + 1.25,
+      player.position.z
+    );
+
+
   camera.lookAt(
-    target
+    lookTarget
   );
 
 }
@@ -2024,66 +2034,30 @@ function updateCamera(
 
 function updateHUD() {
 
-  const healthFill =
+  const health =
     document.getElementById(
       "healthFill"
     );
 
 
-  const armorFill =
+  const armor =
     document.getElementById(
       "armorFill"
     );
 
 
-  if (
-    healthFill
-  ) {
+  if (health) {
 
-    healthFill.style.width =
+    health.style.width =
       "100%";
 
   }
 
 
-  if (
-    armorFill
-  ) {
+  if (armor) {
 
-    armorFill.style.width =
+    armor.style.width =
       "70%";
-
-  }
-
-
-  const missionTitle =
-    document.getElementById(
-      "missionTitle"
-    );
-
-
-  const missionText =
-    document.getElementById(
-      "missionText"
-    );
-
-
-  if (
-    missionTitle
-  ) {
-
-    missionTitle.textContent =
-      "Welcome to the City";
-
-  }
-
-
-  if (
-    missionText
-  ) {
-
-    missionText.textContent =
-      "Explore the city.";
 
   }
 
@@ -2189,20 +2163,20 @@ function startGame() {
 
   setTimeout(
     hideLoadingScreen,
-    500
+    700
   );
 
 
   setTimeout(
     loadPlayer,
-    300
+    500
   );
 
 }
 
 
 /* =========================================================
-   BOOT GAME
+   BOOT
 ========================================================= */
 
 setLoading(
