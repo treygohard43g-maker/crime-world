@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
   <meta charset="UTF-8">
 
   <meta
@@ -14,7 +12,6 @@
 
   <link rel="stylesheet" href="style.css">
 
-  <!-- Three.js import map -->
   <script type="importmap">
   {
     "imports": {
@@ -22,139 +19,145 @@
     }
   }
   </script>
-
 </head>
-
 
 <body>
 
   <div id="game"></div>
 
 
-  <!-- =====================================================
-       HUD
-  ====================================================== -->
+  <!-- HUD -->
 
-  <div id="hud">
+  <div class="hud">
 
-    <div class="top-bar">
-
-      <div class="game-logo">
-        CRIME WORLD
-      </div>
-
-      <div class="wanted">
-        ★★★★★
-      </div>
-
-      <div class="cash">
-        $0
-      </div>
-
+    <div class="game-logo">
+      <span>CRIME</span>
+      <strong>WORLD</strong>
     </div>
 
+    <div class="wanted">
+      <span>WANTED</span>
 
-    <div class="player-status">
-
-      <div class="status-bar health">
-
-        <span>HEALTH</span>
-
-        <div class="bar">
-          <div
-            id="healthFill"
-            class="fill"
-          ></div>
-        </div>
-
+      <div class="stars">
+        <span>★</span>
+        <span>★</span>
+        <span>★</span>
+        <span>★</span>
+        <span>★</span>
       </div>
-
-
-      <div class="status-bar armor">
-
-        <span>ARMOR</span>
-
-        <div class="bar">
-          <div
-            id="armorFill"
-            class="fill"
-          ></div>
-        </div>
-
-      </div>
-
     </div>
 
-
-    <div id="missionBox">
-
-      <div id="missionTitle">
-        Welcome to the City
-      </div>
-
-      <div id="missionText">
-        Explore the city.
-      </div>
-
+    <div class="money">
+      <small>CASH</small>
+      <strong>$0</strong>
     </div>
 
   </div>
 
 
-  <!-- =====================================================
-       MOBILE CONTROLS
-  ====================================================== -->
+  <!-- PLAYER STATUS -->
 
-  <div id="joystick">
+  <div class="player-status">
 
-    <div id="joystickKnob"></div>
+    <div class="health-bar">
+      <div id="healthFill"></div>
+    </div>
+
+    <div class="armor-bar">
+      <div id="armorFill"></div>
+    </div>
 
   </div>
 
 
-  <button id="runButton">
-    RUN
-  </button>
+  <!-- MISSION -->
+
+  <div class="mission-box">
+
+    <small>MISSION</small>
+
+    <strong id="missionTitle">
+      Welcome to the City
+    </strong>
+
+    <p id="missionText">
+      Explore the city.
+    </p>
+
+  </div>
 
 
-  <button id="jumpButton">
-    JUMP
-  </button>
+  <!-- JOYSTICK -->
+
+  <div
+    class="joystick"
+    id="joystick"
+  >
+
+    <div
+      class="joystick-knob"
+      id="joystickKnob"
+    ></div>
+
+  </div>
 
 
-  <button id="actionButton">
-    ACTION
-  </button>
+  <!-- GAME CONTROLS -->
+
+  <div class="controls">
+
+    <button
+      type="button"
+      class="control-button"
+      id="jumpButton"
+    >
+      JUMP
+    </button>
+
+    <button
+      type="button"
+      class="control-button run"
+      id="runButton"
+    >
+      RUN
+    </button>
+
+    <button
+      type="button"
+      class="control-button action"
+      id="actionButton"
+    >
+      ACTION
+    </button>
+
+  </div>
 
 
-  <div id="cameraTouchArea"></div>
+  <!-- CAMERA TOUCH AREA -->
+
+  <div
+    id="cameraTouchArea"
+  ></div>
 
 
-  <!-- =====================================================
-       LOADING SCREEN
-  ====================================================== -->
+  <!-- LOADING SCREEN -->
 
   <div id="loadingScreen">
 
     <div class="loading-content">
 
-      <div class="loading-title">
-        CRIME WORLD
+      <div class="loading-logo">
+        CRIME
+        <strong>WORLD</strong>
       </div>
 
-      <div
-        id="loadingText"
-        class="loading-text"
-      >
+      <div id="loadingText">
         Loading...
       </div>
 
       <div class="loading-bar">
 
-        <div
-          id="loadingFill"
-          class="loading-fill"
-        ></div>
+        <div id="loadingFill"></div>
 
       </div>
 
@@ -162,49 +165,11 @@
 
   </div>
 
-
-  <!-- =====================================================
-       GAME
-  ====================================================== -->
 
   <script
     type="module"
     src="./game.js"
   ></script>
 
-
-  <!-- Loading failsafe -->
-  <script>
-
-    window.addEventListener(
-      "load",
-      () => {
-
-        setTimeout(
-          () => {
-
-            const loading =
-              document.getElementById(
-                "loadingScreen"
-              );
-
-            if (loading) {
-
-              loading.classList.add(
-                "hidden"
-              );
-
-            }
-
-          },
-          5000
-        );
-
-      }
-    );
-
-  </script>
-
 </body>
-
 </html>
