@@ -662,3 +662,31 @@ canvas {
   }
 
 }
+
+/* GAME CONTROLS - FORCE VISIBLE */
+
+.joystick {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.controls {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.control-button {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.player-status {
+  display: block !important;
+}
+
+#cameraTouchArea {
+  pointer-events: auto;
+}
