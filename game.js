@@ -7,49 +7,59 @@ import { GLTFLoader } from
 
 /* =========================================================
    CRIME WORLD
-   First realistic 3D foundation
-========================================================= */
-
-
-/* =========================================================
-   BASIC SETUP
+   Maria - Third Person Player
 ========================================================= */
 
 const game = document.getElementById("game");
 
+
+/* =========================================================
+   SCENE
+========================================================= */
+
 const scene = new THREE.Scene();
 
-scene.background = new THREE.Color(0x9db4c9);
+scene.background =
+  new THREE.Color(0x9db4c9);
 
-scene.fog = new THREE.Fog(
-  0x9db4c9,
-  45,
-  220
-);
+scene.fog =
+  new THREE.Fog(
+    0x9db4c9,
+    45,
+    220
+  );
 
 
-/* CAMERA */
+/* =========================================================
+   CAMERA
+========================================================= */
 
-const camera = new THREE.PerspectiveCamera(
-  62,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  500
-);
+const camera =
+  new THREE.PerspectiveCamera(
+    62,
+    window.innerWidth /
+    window.innerHeight,
+    0.1,
+    500
+  );
 
 camera.position.set(
   0,
-  3.5,
+  3,
   6
 );
 
 
-/* RENDERER */
+/* =========================================================
+   RENDERER
+========================================================= */
 
-const renderer = new THREE.WebGLRenderer({
-  antialias: true,
-  powerPreference: "high-performance"
-});
+const renderer =
+  new THREE.WebGLRenderer({
+    antialias: true,
+    powerPreference:
+      "high-performance"
+  });
 
 renderer.setSize(
   window.innerWidth,
@@ -57,7 +67,10 @@ renderer.setSize(
 );
 
 renderer.setPixelRatio(
-  Math.min(window.devicePixelRatio, 1.7)
+  Math.min(
+    window.devicePixelRatio,
+    1.7
+  )
 );
 
 renderer.shadowMap.enabled = true;
@@ -71,16 +84,17 @@ renderer.outputColorSpace =
 renderer.toneMapping =
   THREE.ACESFilmicToneMapping;
 
-renderer.toneMappingExposure = 1.05;
+renderer.toneMappingExposure =
+  1.05;
 
-game.appendChild(renderer.domElement);
+game.appendChild(
+  renderer.domElement
+);
 
 
 /* =========================================================
    LIGHTING
 ========================================================= */
-
-/* SKY */
 
 const skyLight =
   new THREE.HemisphereLight(
@@ -91,8 +105,6 @@ const skyLight =
 
 scene.add(skyLight);
 
-
-/* SUN */
 
 const sun =
   new THREE.DirectionalLight(
@@ -108,18 +120,32 @@ sun.position.set(
 
 sun.castShadow = true;
 
-sun.shadow.mapSize.width = 2048;
-sun.shadow.mapSize.height = 2048;
+sun.shadow.mapSize.width =
+  2048;
 
-sun.shadow.camera.left = -100;
-sun.shadow.camera.right = 100;
-sun.shadow.camera.top = 100;
-sun.shadow.camera.bottom = -100;
+sun.shadow.mapSize.height =
+  2048;
 
-sun.shadow.camera.near = 1;
-sun.shadow.camera.far = 300;
+sun.shadow.camera.left =
+  -100;
 
-sun.shadow.bias = -0.0005;
+sun.shadow.camera.right =
+  100;
+
+sun.shadow.camera.top =
+  100;
+
+sun.shadow.camera.bottom =
+  -100;
+
+sun.shadow.camera.near =
+  1;
+
+sun.shadow.camera.far =
+  300;
+
+sun.shadow.bias =
+  -0.0005;
 
 scene.add(sun);
 
@@ -128,7 +154,8 @@ scene.add(sun);
    WORLD
 ========================================================= */
 
-const world = new THREE.Group();
+const world =
+  new THREE.Group();
 
 scene.add(world);
 
@@ -144,17 +171,20 @@ const roadMaterial =
     metalness: 0.02
   });
 
+
 const sidewalkMaterial =
   new THREE.MeshStandardMaterial({
     color: 0x777a7d,
     roughness: 0.9
   });
 
+
 const grassMaterial =
   new THREE.MeshStandardMaterial({
     color: 0x405342,
     roughness: 1
   });
+
 
 const buildingMaterials = [
 
@@ -203,7 +233,7 @@ world.add(ground);
 
 
 /* =========================================================
-   ROAD
+   ROADS
 ========================================================= */
 
 function createRoad(
@@ -234,8 +264,6 @@ function createRoad(
   world.add(road);
 }
 
-
-/* MAIN ROADS */
 
 createRoad(
   0,
@@ -316,8 +344,6 @@ function createRoadLine(
 }
 
 
-/* CENTER MARKINGS */
-
 for (
   let x = -230;
   x <= 230;
@@ -331,6 +357,7 @@ for (
     0.14
   );
 }
+
 
 for (
   let z = -230;
@@ -379,8 +406,6 @@ function createSidewalk(
   world.add(sidewalk);
 }
 
-
-/* Around central roads */
 
 createSidewalk(
   0,
@@ -453,8 +478,6 @@ function createBuilding(
   world.add(building);
 
 
-  /* ROOFTOP */
-
   const roof =
     new THREE.Mesh(
       new THREE.BoxGeometry(
@@ -479,8 +502,6 @@ function createBuilding(
   world.add(roof);
 
 
-  /* WINDOWS */
-
   createWindows(
     x,
     z,
@@ -492,7 +513,7 @@ function createBuilding(
 
 
 /* =========================================================
-   BUILDING WINDOWS
+   WINDOWS
 ========================================================= */
 
 function createWindows(
@@ -556,8 +577,6 @@ function createWindows(
       }
 
 
-      /* FRONT */
-
       const front =
         new THREE.Mesh(
           new THREE.BoxGeometry(
@@ -571,19 +590,21 @@ function createWindows(
       front.position.set(
         px,
         y,
-        z - depth / 2 - 0.03
+        z -
+        depth / 2 -
+        0.03
       );
 
       world.add(front);
 
 
-      /* BACK */
-
       const back =
         front.clone();
 
       back.position.z =
-        z + depth / 2 + 0.03;
+        z +
+        depth / 2 +
+        0.03;
 
       world.add(back);
     }
@@ -592,7 +613,7 @@ function createWindows(
 
 
 /* =========================================================
-   CITY BLOCKS
+   CITY
 ========================================================= */
 
 const buildingPositions = [
@@ -618,7 +639,10 @@ const buildingPositions = [
 ];
 
 
-for (const building of buildingPositions) {
+for (
+  const building
+  of buildingPositions
+) {
 
   createBuilding(
     building[0],
@@ -710,12 +734,16 @@ const treeLocations = [
 ];
 
 
-for (const [x, z] of treeLocations) {
+for (
+  const [x, z]
+  of treeLocations
+) {
 
   createTree(
     x,
     z,
-    0.9 + Math.random() * 0.35
+    0.9 +
+    Math.random() * 0.35
   );
 }
 
@@ -800,7 +828,7 @@ function createStreetLight(
     );
 
   lamp.position.set(
-    1.0,
+    1,
     4.7,
     0
   );
@@ -858,8 +886,6 @@ const animations = {};
 let activeAnimation = null;
 
 
-/* PLAYER STATE */
-
 const playerState = {
 
   position:
@@ -869,14 +895,9 @@ const playerState = {
       25
     ),
 
-  velocity:
-    new THREE.Vector3(),
-
   speed: 4.2,
 
   runSpeed: 7.2,
-
-  rotation: 0,
 
   health: 100,
 
@@ -886,32 +907,84 @@ const playerState = {
 
 
 /* =========================================================
-   LOAD PLAYER MODEL
+   GLTF LOADER
 ========================================================= */
 
 const loader =
   new GLTFLoader();
 
 
+/* =========================================================
+   LOAD MARIA
+========================================================= */
+
 function loadPlayer() {
 
   return new Promise(
     (resolve) => {
 
+      const modelPath =
+        "assets/characters/Maria%20WProp%20J%20J%20Ong.glb";
+
+
       loader.load(
 
-        "assets/characters/player.glb",
+        modelPath,
 
         (gltf) => {
+
+          console.log(
+            "Maria loaded successfully"
+          );
+
 
           player =
             gltf.scene;
 
-          player.scale.set(
-            1,
-            1,
-            1
+
+          /* -----------------------------------------
+             AUTOMATIC MODEL SIZING
+          ----------------------------------------- */
+
+          const box =
+            new THREE.Box3()
+              .setFromObject(
+                player
+              );
+
+
+          const size =
+            new THREE.Vector3();
+
+          box.getSize(
+            size
           );
+
+
+          const desiredHeight =
+            1.75;
+
+
+          if (
+            size.y > 0
+          ) {
+
+            const scale =
+              desiredHeight /
+              size.y;
+
+            player.scale.set(
+              scale,
+              scale,
+              scale
+            );
+
+          }
+
+
+          /* -----------------------------------------
+             PLACE CHARACTER
+          ----------------------------------------- */
 
           player.position.copy(
             playerState.position
@@ -937,10 +1010,14 @@ function loadPlayer() {
           );
 
 
-          scene.add(player);
+          scene.add(
+            player
+          );
 
 
-          /* ANIMATIONS */
+          /* -----------------------------------------
+             ANIMATIONS
+          ----------------------------------------- */
 
           if (
             gltf.animations &&
@@ -958,23 +1035,29 @@ function loadPlayer() {
               of gltf.animations
             ) {
 
-              animations[
-                clip.name.toLowerCase()
-              ] =
+              const key =
+                clip.name
+                  .toLowerCase();
+
+              animations[key] =
                 mixer.clipAction(
                   clip
                 );
 
+              console.log(
+                "Animation:",
+                clip.name
+              );
+
             }
 
 
-            findAnimation(
-              [
-                "idle",
-                "standing",
-                "breathing"
-              ]
-            );
+            findAnimation([
+              "idle",
+              "standing",
+              "breathing"
+            ]);
+
           }
 
 
@@ -983,6 +1066,7 @@ function loadPlayer() {
           );
 
         },
+
 
         (progress) => {
 
@@ -997,23 +1081,28 @@ function loadPlayer() {
               ) * 100;
 
             setLoading(
-              percent,
-              "Loading player..."
+              Math.min(
+                percent,
+                95
+              ),
+              "Loading Maria..."
             );
 
           }
 
         },
 
-        () => {
 
-          console.warn(
-            "player.glb could not be loaded."
+        (error) => {
+
+          console.error(
+            "Maria could not be loaded:",
+            error
           );
 
           setLoading(
             100,
-            "Player model missing"
+            "Could not load character"
           );
 
           resolve(
@@ -1030,62 +1119,69 @@ function loadPlayer() {
 
 
 /* =========================================================
-   ANIMATION
+   ANIMATION FINDER
 ========================================================= */
 
 function findAnimation(
-  possibleNames
+  names
 ) {
 
-  if (!mixer) return;
+  if (!mixer) {
+    return;
+  }
 
 
-  for (
-    const name
-    of possibleNames
-  ) {
+  const key =
+    Object.keys(
+      animations
+    ).find(
+      animationName => {
 
-    const key =
-      Object.keys(
-        animations
-      ).find(
-        animationName =>
-          animationName
-            .includes(
+        return names.some(
+          name =>
+            animationName.includes(
               name
             )
-      );
+        );
+
+      }
+    );
 
 
-    if (key) {
+  if (key) {
 
-      playAnimation(
-        key
-      );
+    playAnimation(
+      key
+    );
 
-      return;
-    }
   }
+
 }
 
+
+/* =========================================================
+   PLAY ANIMATION
+========================================================= */
 
 function playAnimation(
   name
 ) {
 
-  if (
-    !animations[name]
-  ) return;
-
-
   const next =
     animations[name];
+
+
+  if (!next) {
+    return;
+  }
 
 
   if (
     activeAnimation === next
   ) {
+
     return;
+
   }
 
 
@@ -1096,6 +1192,7 @@ function playAnimation(
     activeAnimation.fadeOut(
       0.2
     );
+
   }
 
 
@@ -1111,7 +1208,7 @@ function playAnimation(
 
 
 /* =========================================================
-   MOBILE JOYSTICK
+   JOYSTICK
 ========================================================= */
 
 const joystick =
@@ -1129,6 +1226,7 @@ let joystickActive =
   false;
 
 let joystickX = 0;
+
 let joystickY = 0;
 
 let joystickPointerId =
@@ -1145,6 +1243,7 @@ function updateJoystick(
 
   const rect =
     joystick.getBoundingClientRect();
+
 
   const centerX =
     rect.left +
@@ -1185,6 +1284,7 @@ function updateJoystick(
       dy /
       distance *
       joystickRadius;
+
   }
 
 
@@ -1233,7 +1333,9 @@ joystick.addEventListener(
       event.pointerId !==
       joystickPointerId
     ) {
+
       return;
+
     }
 
     updateJoystick(
@@ -1253,6 +1355,7 @@ function resetJoystick() {
     null;
 
   joystickX = 0;
+
   joystickY = 0;
 
   knob.style.transform =
@@ -1272,7 +1375,7 @@ joystick.addEventListener(
 
 
 /* =========================================================
-   RUN BUTTON
+   RUN
 ========================================================= */
 
 const runButton =
@@ -1314,7 +1417,7 @@ runButton.addEventListener(
 
 
 /* =========================================================
-   CAMERA CONTROL
+   CAMERA TOUCH
 ========================================================= */
 
 const cameraTouchArea =
@@ -1333,11 +1436,9 @@ let lastCameraY =
   0;
 
 
-let cameraYaw =
-  0;
+let cameraYaw = 0;
 
-let cameraPitch =
-  0.18;
+let cameraPitch = 0.18;
 
 
 cameraTouchArea.addEventListener(
@@ -1369,7 +1470,9 @@ cameraTouchArea.addEventListener(
       event.pointerId !==
       cameraPointerId
     ) {
+
       return;
+
     }
 
 
@@ -1422,10 +1525,6 @@ cameraTouchArea.addEventListener(
    PLAYER MOVEMENT
 ========================================================= */
 
-const clock =
-  new THREE.Clock();
-
-
 function updatePlayer(
   delta
 ) {
@@ -1442,7 +1541,7 @@ function updatePlayer(
     joystickY;
 
 
-  const inputMagnitude =
+  const magnitude =
     Math.min(
       1,
       Math.sqrt(
@@ -1453,8 +1552,7 @@ function updatePlayer(
 
 
   if (
-    inputMagnitude >
-    0.05
+    magnitude > 0.05
   ) {
 
     const speed =
@@ -1462,10 +1560,6 @@ function updatePlayer(
         ? playerState.runSpeed
         : playerState.speed;
 
-
-    /*
-      Camera-relative movement
-    */
 
     const forward =
       new THREE.Vector3(
@@ -1504,15 +1598,10 @@ function updatePlayer(
     player.position.addScaledVector(
       direction,
       speed *
-      inputMagnitude *
+      magnitude *
       delta
     );
 
-
-    /*
-      Rotate character
-      toward movement
-    */
 
     const targetRotation =
       Math.atan2(
@@ -1529,49 +1618,33 @@ function updatePlayer(
       );
 
 
-    /*
-      Animation
-    */
+    if (running) {
 
-    if (
-      running
-    ) {
-
-      findAnimation(
-        [
-          "run",
-          "running",
-          "sprint"
-        ]
-      );
+      findAnimation([
+        "run",
+        "running",
+        "sprint"
+      ]);
 
     } else {
 
-      findAnimation(
-        [
-          "walk",
-          "walking"
-        ]
-      );
+      findAnimation([
+        "walk",
+        "walking"
+      ]);
 
     }
 
   } else {
 
-    findAnimation(
-      [
-        "idle",
-        "standing",
-        "breathing"
-      ]
-    );
+    findAnimation([
+      "idle",
+      "standing",
+      "breathing"
+    ]);
 
   }
 
-
-  /*
-    Keep player inside world
-  */
 
   player.position.x =
     THREE.MathUtils.clamp(
@@ -1579,6 +1652,7 @@ function updatePlayer(
       -230,
       230
     );
+
 
   player.position.z =
     THREE.MathUtils.clamp(
@@ -1591,7 +1665,7 @@ function updatePlayer(
 
 
 /* =========================================================
-   ANGLE SMOOTHING
+   SMOOTH ROTATION
 ========================================================= */
 
 function smoothAngle(
@@ -1636,19 +1710,16 @@ function updateCamera(
   }
 
 
-  const distance =
-    5.4;
+  const distance = 5.0;
 
-
-  const height =
-    2.7;
+  const height = 2.5;
 
 
   const target =
     new THREE.Vector3(
       player.position.x,
       player.position.y +
-      1.35,
+      1.25,
       player.position.z
     );
 
@@ -1712,16 +1783,26 @@ function updateHUD() {
     );
 
 
-  health.style.width =
-    `${playerState.health}%`;
+  if (health) {
 
-  armor.style.width =
-    `${playerState.armor}%`;
+    health.style.width =
+      `${playerState.health}%`;
+
+  }
+
+
+  if (armor) {
+
+    armor.style.width =
+      `${playerState.armor}%`;
+
+  }
+
 }
 
 
 /* =========================================================
-   LOADING
+   LOADING SCREEN
 ========================================================= */
 
 function setLoading(
@@ -1740,13 +1821,30 @@ function setLoading(
     );
 
 
-  fill.style.width =
-    `${Math.min(100, percent)}%`;
+  if (fill) {
 
-  text.textContent =
-    message;
+    fill.style.width =
+      `${Math.min(
+        100,
+        percent
+      )}%`;
+
+  }
+
+
+  if (text) {
+
+    text.textContent =
+      message;
+
+  }
+
 }
 
+
+/* =========================================================
+   START GAME
+========================================================= */
 
 async function startGame() {
 
@@ -1760,33 +1858,33 @@ async function startGame() {
     resolve =>
       setTimeout(
         resolve,
-        250
+        300
       )
   );
 
 
   setLoading(
-    45,
-    "Preparing player..."
+    40,
+    "Preparing Maria..."
   );
 
 
-  const playerLoaded =
+  const loaded =
     await loadPlayer();
 
 
-  if (!playerLoaded) {
+  if (loaded) {
 
     setLoading(
       100,
-      "Upload player.glb to continue"
+      "Welcome to Crime World"
     );
 
   } else {
 
     setLoading(
       100,
-      "Welcome to Crime World"
+      "Character failed to load"
     );
 
   }
@@ -1798,18 +1896,23 @@ async function startGame() {
   setTimeout(
     () => {
 
-      document
-        .getElementById(
+      const screen =
+        document.getElementById(
           "loadingScreen"
-        )
-        .classList
-        .add(
+        );
+
+      if (screen) {
+
+        screen.classList.add(
           "hidden"
         );
 
+      }
+
     },
-    700
+    800
   );
+
 }
 
 
@@ -1833,6 +1936,7 @@ window.addEventListener(
       window.innerHeight
     );
 
+
     renderer.setPixelRatio(
       Math.min(
         window.devicePixelRatio,
@@ -1845,8 +1949,12 @@ window.addEventListener(
 
 
 /* =========================================================
-   MAIN LOOP
+   GAME LOOP
 ========================================================= */
+
+const clock =
+  new THREE.Clock();
+
 
 function animate() {
 
@@ -1875,6 +1983,7 @@ function animate() {
     delta
   );
 
+
   updateCamera(
     delta
   );
@@ -1884,12 +1993,9 @@ function animate() {
     scene,
     camera
   );
+
 }
 
-
-/* =========================================================
-   START
-========================================================= */
 
 animate();
 
