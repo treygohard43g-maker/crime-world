@@ -83,7 +83,6 @@ const camera =
     700
   );
 
-
 camera.position.set(
   0,
   4,
@@ -100,7 +99,6 @@ const renderer =
     antialias: true,
     powerPreference: "high-performance"
   });
-
 
 renderer.setSize(
   window.innerWidth,
@@ -128,8 +126,9 @@ renderer.toneMapping =
 renderer.toneMappingExposure =
   1.15;
 
-
-game.appendChild(renderer.domElement);
+game.appendChild(
+  renderer.domElement
+);
 
 
 /* =========================================================
@@ -143,7 +142,9 @@ const skyLight =
     2.2
   );
 
-scene.add(skyLight);
+scene.add(
+  skyLight
+);
 
 
 const sun =
@@ -171,7 +172,9 @@ sun.shadow.camera.bottom = -180;
 sun.shadow.camera.near = 1;
 sun.shadow.camera.far = 500;
 
-scene.add(sun);
+scene.add(
+  sun
+);
 
 
 /* =========================================================
@@ -209,7 +212,9 @@ ground.rotation.x =
 
 ground.receiveShadow = true;
 
-scene.add(ground);
+scene.add(
+  ground
+);
 
 
 /* =========================================================
@@ -256,59 +261,53 @@ function createRoad(
 
   road.receiveShadow = true;
 
-  scene.add(road);
+  scene.add(
+    road
+  );
 
 }
 
 
-/* Main roads */
-
 createRoad(
   0,
   0,
   18,
-  WORLD_SIZE,
-  0
+  WORLD_SIZE
 );
 
 createRoad(
   0,
   0,
   WORLD_SIZE,
-  18,
-  0
+  18
 );
 
 createRoad(
   -90,
   0,
   12,
-  WORLD_SIZE,
-  0
+  WORLD_SIZE
 );
 
 createRoad(
   90,
   0,
   12,
-  WORLD_SIZE,
-  0
+  WORLD_SIZE
 );
 
 createRoad(
   0,
   -90,
   WORLD_SIZE,
-  12,
-  0
+  12
 );
 
 createRoad(
   0,
   90,
   WORLD_SIZE,
-  12,
-  0
+  12
 );
 
 
@@ -354,9 +353,42 @@ function createSidewalk(
 
   sidewalk.receiveShadow = true;
 
-  scene.add(sidewalk);
+  scene.add(
+    sidewalk
+  );
 
 }
+
+
+/* sidewalks */
+
+createSidewalk(
+  -10,
+  0,
+  2,
+  WORLD_SIZE
+);
+
+createSidewalk(
+  10,
+  0,
+  2,
+  WORLD_SIZE
+);
+
+createSidewalk(
+  0,
+  -10,
+  WORLD_SIZE,
+  2
+);
+
+createSidewalk(
+  0,
+  10,
+  WORLD_SIZE,
+  2
+);
 
 
 /* =========================================================
@@ -400,12 +432,12 @@ function createRoadLine(
     z
   );
 
-  scene.add(line);
+  scene.add(
+    line
+  );
 
 }
 
-
-/* center markings */
 
 for (
   let z = -170;
@@ -421,6 +453,7 @@ for (
   );
 
 }
+
 
 for (
   let x = -170;
@@ -457,7 +490,6 @@ function createBuilding(
       depth
     );
 
-
   const buildingMaterial =
     new THREE.MeshStandardMaterial({
       color:
@@ -472,13 +504,11 @@ function createBuilding(
       metalness: 0.08
     });
 
-
   const building =
     new THREE.Mesh(
       buildingGeometry,
       buildingMaterial
     );
-
 
   building.position.set(
     x,
@@ -489,10 +519,10 @@ function createBuilding(
   building.castShadow = true;
   building.receiveShadow = true;
 
-  scene.add(building);
+  scene.add(
+    building
+  );
 
-
-  /* rooftop */
 
   const roofGeometry =
     new THREE.BoxGeometry(
@@ -521,10 +551,10 @@ function createBuilding(
 
   roof.castShadow = true;
 
-  scene.add(roof);
+  scene.add(
+    roof
+  );
 
-
-  /* windows */
 
   const windowMaterial =
     new THREE.MeshStandardMaterial({
@@ -750,7 +780,9 @@ function createTree(
 
   trunk.castShadow = true;
 
-  scene.add(trunk);
+  scene.add(
+    trunk
+  );
 
 
   const crownGeometry =
@@ -782,12 +814,12 @@ function createTree(
 
   crown.castShadow = true;
 
-  scene.add(crown);
+  scene.add(
+    crown
+  );
 
 }
 
-
-/* trees around city */
 
 for (
   let i = 0;
@@ -860,7 +892,9 @@ function createStreetLight(
 
   pole.castShadow = true;
 
-  scene.add(pole);
+  scene.add(
+    pole
+  );
 
 
   const lampGeometry =
@@ -889,7 +923,9 @@ function createStreetLight(
     z
   );
 
-  scene.add(lamp);
+  scene.add(
+    lamp
+  );
 
 
   const light =
@@ -905,12 +941,12 @@ function createStreetLight(
     z
   );
 
-  scene.add(light);
+  scene.add(
+    light
+  );
 
 }
 
-
-/* main street lights */
 
 for (
   let i = -150;
@@ -968,24 +1004,119 @@ let activeAnimation = null;
 
 
 /* =========================================================
-   MARIA LOADER
+   MARIA LOADER + VISIBLE DIAGNOSTIC
 ========================================================= */
 
-async function loadPlayer() {
+function showMariaStatus(
+  message,
+  type = "info"
+) {
 
-  try {
-
-    setLoading(
-      100,
-      "Entering Crime World..."
+  let box =
+    document.getElementById(
+      "mariaStatus"
     );
 
 
-    /*
-      GLTFLoader is loaded separately so
-      it cannot prevent the main game
-      from starting.
-    */
+  if (!box) {
+
+    box =
+      document.createElement(
+        "div"
+      );
+
+    box.id =
+      "mariaStatus";
+
+
+    Object.assign(
+      box.style,
+      {
+        position: "fixed",
+        left: "12px",
+        right: "12px",
+        bottom: "120px",
+        zIndex: "99999",
+        padding: "14px",
+        borderRadius: "12px",
+        fontFamily:
+          "Arial, sans-serif",
+        fontSize: "13px",
+        lineHeight: "1.45",
+        color: "#ffffff",
+        background:
+          "rgba(0,0,0,0.92)",
+        border:
+          "2px solid #4da6ff",
+        whiteSpace:
+          "pre-wrap",
+        wordBreak:
+          "break-word",
+        maxHeight: "190px",
+        overflow: "auto"
+      }
+    );
+
+
+    document.body.appendChild(
+      box
+    );
+
+  }
+
+
+  if (
+    type === "error"
+  ) {
+
+    box.style.borderColor =
+      "#ff4040";
+
+  } else if (
+    type === "success"
+  ) {
+
+    box.style.borderColor =
+      "#35d07f";
+
+  } else {
+
+    box.style.borderColor =
+      "#4da6ff";
+
+  }
+
+
+  box.textContent =
+    message;
+
+}
+
+
+async function loadPlayer() {
+
+  const modelPath =
+    new URL(
+      "./assets/characters/Maria WProp J J Ong.glb",
+      import.meta.url
+    ).href;
+
+
+  showMariaStatus(
+    "MARIA STATUS\n\n" +
+    "Starting Maria loader...\n\n" +
+    "File:\n" +
+    modelPath
+  );
+
+
+  try {
+
+    showMariaStatus(
+      "MARIA STATUS\n\n" +
+      "Loading GLTFLoader..."
+    );
+
 
     const module =
       await import(
@@ -997,187 +1128,276 @@ async function loadPlayer() {
       module.GLTFLoader;
 
 
+    if (!GLTFLoader) {
+
+      throw new Error(
+        "GLTFLoader was not found."
+      );
+
+    }
+
+
+    showMariaStatus(
+      "MARIA STATUS\n\n" +
+      "GLTFLoader loaded ✓\n\n" +
+      "Checking Maria file..."
+    );
+
+
+    const response =
+      await fetch(
+        modelPath,
+        {
+          cache: "no-store"
+        }
+      );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Maria GLB file was not found.\n\n" +
+        "HTTP Status: " +
+        response.status +
+        " " +
+        response.statusText
+      );
+
+    }
+
+
+    showMariaStatus(
+      "MARIA STATUS\n\n" +
+      "Maria GLB file found ✓\n\n" +
+      "HTTP Status: " +
+      response.status +
+      "\n\n" +
+      "Parsing Maria..."
+    );
+
+
     const loader =
       new GLTFLoader();
 
-
-    const modelPath =
-  "./assets/characters/Maria%20WProp%20J%20J%20Ong.glb";
 
     loader.load(
 
       modelPath,
 
+
+      /* SUCCESS */
+
       (gltf) => {
 
-        console.log(
-          "Maria loaded successfully."
-        );
+        try {
+
+          player =
+            gltf.scene;
 
 
-        player =
-          gltf.scene;
+          if (!player) {
 
-
-        /* measure character */
-
-        const box =
-          new THREE.Box3()
-            .setFromObject(
-              player
+            throw new Error(
+              "GLB loaded but contains no scene."
             );
-
-
-        const size =
-          new THREE.Vector3();
-
-
-        box.getSize(
-          size
-        );
-
-
-        /*
-          Scale Maria to approximately
-          real human height.
-        */
-
-        const desiredHeight =
-          1.75;
-
-
-        if (
-          size.y > 0
-        ) {
-
-          const scale =
-            desiredHeight /
-            size.y;
-
-
-          player.scale.set(
-            scale,
-            scale,
-            scale
-          );
-
-        }
-
-
-        player.position.copy(
-          playerState.position
-        );
-
-
-        player.traverse(
-          (object) => {
-
-            if (
-              object.isMesh
-            ) {
-
-              object.castShadow =
-                true;
-
-              object.receiveShadow =
-                true;
-
-            }
 
           }
-        );
 
 
-        scene.add(
-          player
-        );
-
-
-        /* animations */
-
-        if (
-          gltf.animations &&
-          gltf.animations.length
-        ) {
-
-          mixer =
-            new THREE.AnimationMixer(
-              player
-            );
-
-
-          for (
-            const clip of
-            gltf.animations
-          ) {
-
-            const key =
-              clip.name
-                .toLowerCase();
-
-
-            animations[key] =
-              mixer.clipAction(
-                clip
+          const box =
+            new THREE.Box3()
+              .setFromObject(
+                player
               );
 
 
-            console.log(
-              "Maria animation:",
-              clip.name
+          const size =
+            new THREE.Vector3();
+
+
+          box.getSize(
+            size
+          );
+
+
+          const desiredHeight =
+            1.75;
+
+
+          if (
+            size.y > 0
+          ) {
+
+            const scale =
+              desiredHeight /
+              size.y;
+
+
+            player.scale.set(
+              scale,
+              scale,
+              scale
             );
 
           }
 
 
-          playBestAnimation(
-            [
-              "idle",
-              "standing",
-              "breathing"
-            ]
+          player.position.copy(
+            playerState.position
+          );
+
+
+          player.traverse(
+            (object) => {
+
+              if (
+                object.isMesh
+              ) {
+
+                object.castShadow =
+                  true;
+
+                object.receiveShadow =
+                  true;
+
+              }
+
+            }
+          );
+
+
+          scene.add(
+            player
+          );
+
+
+          /* animations */
+
+          if (
+            gltf.animations &&
+            gltf.animations.length > 0
+          ) {
+
+            mixer =
+              new THREE.AnimationMixer(
+                player
+              );
+
+
+            for (
+              const clip of
+              gltf.animations
+            ) {
+
+              const key =
+                clip.name.toLowerCase();
+
+
+              animations[key] =
+                mixer.clipAction(
+                  clip
+                );
+
+            }
+
+
+            playBestAnimation(
+              [
+                "idle",
+                "standing",
+                "breathing"
+              ]
+            );
+
+          }
+
+
+          showMariaStatus(
+            "MARIA STATUS\n\n" +
+            "✓ MARIA LOADED SUCCESSFULLY\n\n" +
+            "Height: 1.75m\n" +
+            "Animations: " +
+            (
+              gltf.animations
+                ? gltf.animations.length
+                : 0
+            ),
+            "success"
+          );
+
+
+          console.log(
+            "Maria loaded successfully.",
+            gltf
+          );
+
+        } catch (
+          error
+        ) {
+
+          showMariaStatus(
+            "MARIA ERROR\n\n" +
+            "Maria loaded but could not be added.\n\n" +
+            "Exact error:\n" +
+            error.message,
+            "error"
           );
 
         }
 
-
-        /*
-          Put camera behind Maria
-          immediately.
-        */
-
-        camera.position.set(
-          player.position.x,
-          player.position.y + 3.2,
-          player.position.z + 7
-        );
-
       },
+
+
+      /* PROGRESS */
 
       (progress) => {
 
         if (
-          progress.total
+          progress.total > 0
         ) {
 
           const percent =
-            progress.loaded /
-            progress.total *
-            100;
+            Math.round(
+              progress.loaded /
+              progress.total *
+              100
+            );
 
 
-          console.log(
-            `Maria loading: ${Math.round(percent)}%`
+          showMariaStatus(
+            "MARIA STATUS\n\n" +
+            "Downloading Maria...\n\n" +
+            percent +
+            "% complete"
           );
 
         }
 
       },
 
+
+      /* ERROR */
+
       (error) => {
 
+        showMariaStatus(
+          "MARIA ERROR\n\n" +
+          "Maria could NOT be loaded.\n\n" +
+          "Exact error:\n" +
+          (
+            error &&
+            error.message
+              ? error.message
+              : String(error)
+          ) +
+          "\n\nFile:\n" +
+          modelPath,
+          "error"
+        );
+
+
         console.error(
-          "Maria could not be loaded:",
+          "Maria GLTFLoader error:",
           error
         );
 
@@ -1185,7 +1405,25 @@ async function loadPlayer() {
 
     );
 
-  } catch (error) {
+  } catch (
+    error
+  ) {
+
+    showMariaStatus(
+      "MARIA ERROR\n\n" +
+      "Maria loading failed.\n\n" +
+      "Exact error:\n" +
+      (
+        error &&
+        error.message
+          ? error.message
+          : String(error)
+      ) +
+      "\n\nFile:\n" +
+      modelPath,
+      "error"
+    );
+
 
     console.error(
       "Maria loader error:",
@@ -1258,7 +1496,9 @@ function playBestAnimation(
     found !== activeAnimation
   ) {
 
-    if (activeAnimation) {
+    if (
+      activeAnimation
+    ) {
 
       activeAnimation.fadeOut(
         0.2
@@ -1267,7 +1507,8 @@ function playBestAnimation(
     }
 
 
-    found.reset()
+    found
+      .reset()
       .fadeIn(0.2)
       .play();
 
@@ -1388,7 +1629,9 @@ if (joystick) {
         dy / max;
 
 
-      if (joystickKnob) {
+      if (
+        joystickKnob
+      ) {
 
         joystickKnob.style.transform =
           `translate(${dx}px, ${dy}px)`;
@@ -1423,7 +1666,9 @@ function resetJoystick() {
   joystickY = 0;
 
 
-  if (joystickKnob) {
+  if (
+    joystickKnob
+  ) {
 
     joystickKnob.style.transform =
       "translate(0, 0)";
@@ -1600,10 +1845,6 @@ function updatePlayer(
         : playerState.speed;
 
 
-    /*
-      Camera-relative movement.
-    */
-
     const forward =
       new THREE.Vector3(
         Math.sin(cameraAngle),
@@ -1645,10 +1886,6 @@ function updatePlayer(
     );
 
 
-    /*
-      Keep Maria inside the city.
-    */
-
     player.position.x =
       THREE.MathUtils.clamp(
         player.position.x,
@@ -1664,11 +1901,6 @@ function updatePlayer(
         170
       );
 
-
-    /*
-      Character faces movement
-      direction.
-    */
 
     const targetRotation =
       Math.atan2(
@@ -1747,8 +1979,7 @@ function updateCamera(
   const target =
     new THREE.Vector3(
       player.position.x,
-      player.position.y +
-        1.35,
+      player.position.y + 1.35,
       player.position.z
     );
 
@@ -1805,7 +2036,9 @@ function updateHUD() {
     );
 
 
-  if (healthFill) {
+  if (
+    healthFill
+  ) {
 
     healthFill.style.width =
       "100%";
@@ -1813,7 +2046,9 @@ function updateHUD() {
   }
 
 
-  if (armorFill) {
+  if (
+    armorFill
+  ) {
 
     armorFill.style.width =
       "70%";
@@ -1833,7 +2068,9 @@ function updateHUD() {
     );
 
 
-  if (missionTitle) {
+  if (
+    missionTitle
+  ) {
 
     missionTitle.textContent =
       "Welcome to the City";
@@ -1841,7 +2078,9 @@ function updateHUD() {
   }
 
 
-  if (missionText) {
+  if (
+    missionText
+  ) {
 
     missionText.textContent =
       "Explore the city.";
@@ -1948,20 +2187,11 @@ function startGame() {
   updateHUD();
 
 
-  /*
-    Hide loading quickly.
-    The world does not wait for Maria.
-  */
-
   setTimeout(
     hideLoadingScreen,
     500
   );
 
-
-  /*
-    Maria loads in background.
-  */
 
   setTimeout(
     loadPlayer,
