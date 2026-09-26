@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
 
   <meta
@@ -11,12 +13,14 @@
   <title>Crime World</title>
 
   <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
   <!-- GAME -->
   <div id="game"></div>
+
 
   <!-- TOP HUD -->
   <div class="hud">
@@ -27,7 +31,10 @@
     </div>
 
     <div class="wanted">
-      <span id="wantedText">WANTED</span>
+
+      <span id="wantedText">
+        WANTED
+      </span>
 
       <div class="stars">
         <span>★</span>
@@ -36,14 +43,21 @@
         <span>★</span>
         <span>★</span>
       </div>
+
     </div>
 
     <div class="money">
+
       <small>CASH</small>
-      <strong>$2,500</strong>
+
+      <strong>
+        $2,500
+      </strong>
+
     </div>
 
   </div>
+
 
   <!-- PLAYER STATUS -->
   <div class="player-status">
@@ -58,62 +72,145 @@
 
   </div>
 
+
   <!-- MISSION -->
   <div class="mission-box">
-    <small>MISSION</small>
-    <strong id="missionTitle">Welcome to the City</strong>
+
+    <small>
+      MISSION
+    </small>
+
+    <strong id="missionTitle">
+      Welcome to the City
+    </strong>
+
     <p id="missionText">
       Explore the city.
     </p>
+
   </div>
 
+
   <!-- LEFT JOYSTICK -->
-  <div id="joystick" class="joystick">
-    <div id="joystickKnob" class="joystick-knob"></div>
+  <div
+    id="joystick"
+    class="joystick"
+  >
+
+    <div
+      id="joystickKnob"
+      class="joystick-knob"
+    ></div>
+
   </div>
+
 
   <!-- RIGHT CONTROLS -->
   <div class="controls">
 
-    <button id="runButton" class="control-button run">
+    <button
+      id="runButton"
+      class="control-button run"
+    >
       RUN
     </button>
 
-    <button id="jumpButton" class="control-button">
+    <button
+      id="jumpButton"
+      class="control-button"
+    >
       JUMP
     </button>
 
-    <button id="actionButton" class="control-button action">
+    <button
+      id="actionButton"
+      class="control-button action"
+    >
       ACTION
     </button>
 
   </div>
 
+
   <!-- CAMERA AREA -->
   <div id="cameraTouchArea"></div>
 
-  <!-- LOADING -->
+
+  <!-- LOADING SCREEN -->
   <div id="loadingScreen">
 
     <div class="loading-content">
 
       <div class="loading-logo">
+
         CRIME
-        <strong>WORLD</strong>
+
+        <strong>
+          WORLD
+        </strong>
+
       </div>
 
       <div class="loading-bar">
-        <div id="loadingFill"></div>
+
+        <div
+          id="loadingFill"
+          style="width: 10%;"
+        ></div>
+
       </div>
 
-      <p id="loadingText">Loading city...</p>
+      <p id="loadingText">
+        Loading Crime World...
+      </p>
 
     </div>
 
   </div>
 
-  <!-- THREE.JS GAME -->
-  <script type="module" src="game.js"></script>
+
+  <!-- GAME SCRIPT -->
+  <script
+    type="module"
+    src="./game.js"
+  ></script>
+
+
+  <!-- FAILSAFE -->
+  <script>
+
+    /*
+      If something goes wrong inside
+      game.js, don't leave the player
+      trapped on the loading screen.
+    */
+
+    window.addEventListener(
+      "load",
+      () => {
+
+        setTimeout(() => {
+
+          const loading =
+            document.getElementById(
+              "loadingScreen"
+            );
+
+          if (loading) {
+
+            loading.classList.add(
+              "hidden"
+            );
+
+          }
+
+        }, 5000);
+
+      }
+    );
+
+  </script>
 
 </body>
+
 </html>
