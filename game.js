@@ -1002,8 +1002,7 @@ async function loadPlayer() {
 
 
     const modelPath =
-      "assets/characters/Maria%20WProp%20J%20J%20Ong.glb";
-
+  "./assets/characters/Maria%20WProp%20J%20J%20Ong.glb";
 
     loader.load(
 
